@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Django command-line entry point for PEX."""
+
 import os
 import sys
 

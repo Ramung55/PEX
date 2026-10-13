@@ -84,6 +84,25 @@ uv run pytest
 
 The suite validates configuration errors/production defaults, the local midnight boundary, and an actual PostgreSQL test-database connection, in addition to the home-page HTTP smoke test. Django/pytest creates and removes the isolated test database; application migrations use the configured application database.
 
+### Automated checks
+
+After exporting the local environment, run the same non-mutating checks used by CI:
+
+```powershell
+uv run --locked ruff format --check .
+uv run --locked ruff check .
+uv run --locked python manage.py check
+uv run --locked python manage.py migrate --noinput
+uv run --locked pytest tests/test_home.py
+uv run --locked pytest
+```
+
+The format check reports required changes without editing source. To intentionally apply formatting, run `uv run ruff format .`; review the resulting diff. Ruff linting selects basic errors and import ordering, targets Python 3.12, and excludes generated environments/build directories. Ruff's exact version is recorded in `uv.lock`.
+
+`.github/workflows/checks.yml` runs on pushes and pull requests using Python 3.12, uv 0.13.0, locked dependency installation, and separately named format/lint/Django/migration/smoke/full-suite steps. It provisions its own PostgreSQL 17 service with readiness health checks and disposable test-only values; no user credentials or repository secrets are required. Any failed step fails the job; an unavailable database cannot produce a successful test result. The workflow does not deploy the application.
+
+Verification includes a passing run and temporary intentional format/lint/test failures on disposable review branches, followed by clean passing results. Run links and final evidence are recorded on issue #3; intentional defects must not remain in the implementation branch.
+
 ## Project structure and planned scope
 
 - `manage.py`: Django command entry point.

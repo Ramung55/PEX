@@ -1,7 +1,8 @@
-from datetime import datetime, timezone as datetime_timezone
 import os
 import subprocess
 import sys
+from datetime import datetime
+from datetime import timezone as datetime_timezone
 
 import pytest
 from django.conf import settings
@@ -38,7 +39,18 @@ def test_explicit_configuration(environment):
     assert db["PASSWORD"] == environment["DJANGO_DB_PASSWORD"]
 
 
-@pytest.mark.parametrize("name", ["DJANGO_SECRET_KEY", "DJANGO_ALLOWED_HOSTS", "DJANGO_DB_HOST", "DJANGO_DB_PORT", "DJANGO_DB_NAME", "DJANGO_DB_USER", "DJANGO_DB_PASSWORD"])
+@pytest.mark.parametrize(
+    "name",
+    [
+        "DJANGO_SECRET_KEY",
+        "DJANGO_ALLOWED_HOSTS",
+        "DJANGO_DB_HOST",
+        "DJANGO_DB_PORT",
+        "DJANGO_DB_NAME",
+        "DJANGO_DB_USER",
+        "DJANGO_DB_PASSWORD",
+    ],
+)
 def test_required_environment_has_no_fallback(environment, name):
     del environment[name]
     with pytest.raises(ImproperlyConfigured, match=name):
@@ -55,7 +67,18 @@ def test_invalid_port_is_safe(environment, value):
     assert environment["DJANGO_DB_PASSWORD"] not in str(error.value)
 
 
-@pytest.mark.parametrize("name,value", [("PEX_ENV", "unknown"), ("DJANGO_DEBUG", "yes"), ("DJANGO_ALLOWED_HOSTS", "*"), ("DJANGO_ALLOWED_HOSTS", "https://example.com"), ("DJANGO_ALLOWED_HOSTS", "localhost,,example.com"), ("DJANGO_SECRET_KEY", "short"), ("DJANGO_DB_PASSWORD", "REPLACE_WITH_PASSWORD")])
+@pytest.mark.parametrize(
+    "name,value",
+    [
+        ("PEX_ENV", "unknown"),
+        ("DJANGO_DEBUG", "yes"),
+        ("DJANGO_ALLOWED_HOSTS", "*"),
+        ("DJANGO_ALLOWED_HOSTS", "https://example.com"),
+        ("DJANGO_ALLOWED_HOSTS", "localhost,,example.com"),
+        ("DJANGO_SECRET_KEY", "short"),
+        ("DJANGO_DB_PASSWORD", "REPLACE_WITH_PASSWORD"),
+    ],
+)
 def test_unsafe_configuration_rejected(environment, name, value):
     environment[name] = value
     with pytest.raises(ImproperlyConfigured):
@@ -95,7 +118,13 @@ def test_management_command_reports_missing_password_safely():
     assert os.environ["DJANGO_SECRET_KEY"] not in output
 
 
-@pytest.mark.parametrize("instant,expected", [(datetime(2026, 10, 12, 18, 59, tzinfo=datetime_timezone.utc), "2026-10-12"), (datetime(2026, 10, 12, 19, 0, tzinfo=datetime_timezone.utc), "2026-10-13")])
+@pytest.mark.parametrize(
+    "instant,expected",
+    [
+        (datetime(2026, 10, 12, 18, 59, tzinfo=datetime_timezone.utc), "2026-10-12"),
+        (datetime(2026, 10, 12, 19, 0, tzinfo=datetime_timezone.utc), "2026-10-13"),
+    ],
+)
 def test_qyzylorda_midnight(instant, expected):
     assert settings.TIME_ZONE == "Asia/Qyzylorda"
     assert settings.USE_TZ is True

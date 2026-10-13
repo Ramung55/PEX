@@ -1,6 +1,7 @@
 """Explicit environment-based PostgreSQL settings; see README for local setup."""
-from pathlib import Path
+
 import os
+from pathlib import Path
 
 from .environment import configuration
 
