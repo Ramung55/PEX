@@ -1,13 +1,12 @@
-"""Local development settings only; PostgreSQL/environment settings follow in #2."""
+"""Explicit environment-based PostgreSQL settings; see README for local setup."""
 from pathlib import Path
-from secrets import token_urlsafe
+import os
+
+from .environment import configuration
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Ephemeral development key: no production credential is stored in this checkout.
-SECRET_KEY = token_urlsafe(50)
-DEBUG = True
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
+globals().update(configuration(os.environ))
 
 INSTALLED_APPS = [
     "django.contrib.auth",
@@ -43,8 +42,6 @@ TEMPLATES = [
 WSGI_APPLICATION = "pex.wsgi.application"
 ASGI_APPLICATION = "pex.asgi.application"
 
-# Temporary SQLite foundation; #2 replaces this with PostgreSQL.
-DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}}
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Asia/Qyzylorda"
 USE_I18N = True
