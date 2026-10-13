@@ -1,8 +1,8 @@
 # Personal Expense Analyzer — Task Backlog
 
-Tasks migrated to [GitHub Issues](https://github.com/Ramung55/PEX/issues) in the public [PEX repository](https://github.com/Ramung55/PEX). This file retains the handoff descriptions and links to each issue.
+Tasks migrated to [GitHub Issues](https://github.com/Ramung55/PEX/issues) in the public [PEX repository](https://github.com/Ramung55/PEX). This file retains the original handoff descriptions and links to each issue. GitHub issues are the source for current task status, discussion, and acceptance criteria; this file is not a separate status tracker.
 
-This backlog covers `_docs/plan.md` plus the decisions made during brainstorming. Each task is intended for one implementation session; its description repeats the context needed for handoff. Dependencies are existing project components, not knowledge of other task descriptions. Implementation has not started.
+This backlog covers `_docs/plan.md` plus the decisions made during brainstorming. Each task is intended for one implementation session; its description repeats the context needed for handoff. Dependencies are existing project components, not knowledge of other task descriptions. Implementation has not started. Follow `_docs/process.md`: work on one issue at a time, read acceptance criteria before starting and before closing, and commit regularly. Ask before adding dependencies to `pyproject.toml`.
 
 Selected stack: Django, PostgreSQL, HTMX, and Chart.js. Hosting: an owned server, to be selected later. Access: one private account, no public registration, persistent login. Currency: KZT. Timezone: Asia/Qyzylorda. Excluded: bank imports, budgets, savings advice, household sharing, and multiple currencies.
 
@@ -172,4 +172,3 @@ Description: Document automated PostgreSQL backups, retention, storage outside t
 GitHub issue: https://github.com/Ramung55/PEX/issues/33
 Goal: Bring the completed application online once hosting is selected.
 Description: Configure HTTPS, persistent database storage, the private account, scheduled jobs, and backups on the selected server using the deployment instructions. Verify login, an expense, reporting, CSV export, and scheduler execution, and document rollback; this task waits for server/domain details and authorization to deploy.
-
